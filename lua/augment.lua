@@ -40,7 +40,8 @@ M.start_client = function(command, notification_methods, workspace_folders)
         config.workspace_folders = workspace_folders
     end
 
-    local id = vim.lsp.start_client(config)
+    local start = vim.lsp.start or vim.lsp.start_client
+    local id = start(config)
     return id
 end
 

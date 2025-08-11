@@ -1,3 +1,9 @@
+# Fork changes
+
+- fix deprecated `vim.lsp.start_client()` usage
+
+# Original README
+
 # Augment Vim & Neovim Plugin
 
 ## A Quick Tour
