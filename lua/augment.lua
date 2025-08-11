@@ -58,7 +58,7 @@ M.notify = function(client_id, method, params)
         return
     end
 
-    client.notify(method, params)
+    client:notify(method, params)
 end
 
 -- Send a lsp request
