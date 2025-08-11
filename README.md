@@ -1,6 +1,6 @@
 # Fork changes
 
-- fix deprecated `vim.lsp.start_client()` usage
+- fix deprecated `vim.lsp.start_client()` and `client.request` throwing warnings on nvim 0.12
 
 # Original README
 

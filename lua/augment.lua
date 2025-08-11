@@ -69,7 +69,7 @@ M.request = function(client_id, method, params)
         return
     end
 
-    local _, id = client.request(method, params, function(err, result)
+    local _, id = client:request(method, params, function(err, result)
         vim.call('augment#client#NvimResponse', method, params, result, err)
     end)
     return id
