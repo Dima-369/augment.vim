@@ -1,6 +1,7 @@
 # Fork changes
 
 - fix deprecated `vim.lsp.start_client()` and `client.request` throwing warnings on nvim 0.12
+- Automatically restart the language server when it exits unexpectedly.
 
 # Original README
 

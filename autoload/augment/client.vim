@@ -304,12 +304,14 @@ endfunction
 
 " Handle the server exiting
 function! s:OnExit(client, channel, message) abort
-    if has_key(s:client, "job")
-        call remove(s:client, "job")
-        call augment#log#Error('Augment exited: ' . string(a:message))
-    else
-        call augment#log#Erorr('Augment (untracked) exited:' . string(a:message))
-    endif
+if has_key(s:client, "job")
+" The client is dead, so clear it. It will be recreated on the next request.
+let s:client = {}
+call augment#log#Error('Augment exited: ' . string(a:message) . '. Restarting in 2 seconds...')
+call timer_start(2000, {-> augment#client#Client()})
+else
+call augment#log#Error('Augment (untracked) exited:' . string(a:message))
+endif
 endfunction
 
 function! s:GetWorkspaceFolders() abort
@@ -445,13 +447,15 @@ endfunction
 
 " OnExit notification function for nvim plugin.
 function! augment#client#NvimOnExit(code, signal, client_id) abort
-    let msg = printf("code: %d, signal %d", a:code, a:signal)
-    if has_key(s:client, "client_id")
-        call remove(s:client, "client_id")
-        call augment#log#Error('Augment exited: ' . msg)
-    else
-        call augment#log#Erorr('Augment (untracked) exited:' . msg)
-    endif
+let msg = printf("code: %d, signal %d", a:code, a:signal)
+if has_key(s:client, "client_id")
+" The client is dead, so clear it. It will be recreated on the next request.
+let s:client = {}
+call augment#log#Error('Augment exited: ' . msg . '. Restarting in 2 seconds...')
+call timer_start(2000, {-> augment#client#Client()})
+else
+call augment#log#Error('Augment (untracked) exited:' . msg)
+endif
 endfunction
 
 " Return the client, creating a new one if needed
