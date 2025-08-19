@@ -308,7 +308,7 @@ if has_key(s:client, "job")
 " The client is dead, so clear it. It will be recreated on the next request.
 let s:client = {}
 call augment#log#Error('Augment exited: ' . string(a:message) . '. Restarting in 2 seconds...')
-call timer_start(2000, {-> augment#client#Client()})
+call timer_start(2000, {-> s:RestartAndNotify()})
 else
 call augment#log#Error('Augment (untracked) exited:' . string(a:message))
 endif
@@ -452,9 +452,19 @@ if has_key(s:client, "client_id")
 " The client is dead, so clear it. It will be recreated on the next request.
 let s:client = {}
 call augment#log#Error('Augment exited: ' . msg . '. Restarting in 2 seconds...')
-call timer_start(2000, {-> augment#client#Client()})
+call timer_start(2000, {-> s:RestartAndNotify()})
 else
 call augment#log#Error('Augment (untracked) exited:' . msg)
+endif
+endfunction
+
+" Helper function to restart client and notify user
+function! s:RestartAndNotify() abort
+call augment#client#Client()
+if has('nvim')
+call luaeval('vim.notify("Augment Server restarted", vim.log.levels.INFO)')
+else
+echom 'Augment: Server restarted'
 endif
 endfunction
 
